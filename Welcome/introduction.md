@@ -1,16 +1,19 @@
-Notes and Code from Introduction
+Notes from Introduction
 ================
 Brett Whitney
 Jan 5, 2021
 
-Tidy data: each column is a variable, each row is an observation. Tidy
-data lets you focus on analyzing the data rather than getting the data
-in the right format for different functions/packages.
+Tidy data: each column is a variable, each row is an observation.
+
+Tidy data lets you focus on analyzing the data rather than getting the
+data in the right format for different functions/packages.
 
 Good analysis usually iterates between all the various stages but… going
-back and forth between modeling/visualization/transformation absolutely
-vital\! A model cannot question the assumptions it is built upon so it
-can’t surprise you like a visualization might.
+back and forth between modeling/visualization/transformation is
+absolutely vital\!
+
+A model cannot question the assumptions it is built upon so it can’t
+surprise you like a visualization might.
 
 ### Hypothesis Generation vs. Hypothesis Confirmation
 
@@ -25,9 +28,10 @@ this context)
 Visualization and modeling are not exclusive to either the generation or
 confirmation activity\!
 
-\#\#\# Some pre-requisites for making the book work Need to install
-several packages and what not in order for the code in the book to run
-smoothly on my local machine.
+### Some pre-requisites for making the book work
+
+Need to install several packages and what not in order for the code in
+the book to run smoothly on my local machine.
 
 ``` r
 ## Re-Installing tidyverse just to make sure I'm being thorough with my notes
