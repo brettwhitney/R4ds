@@ -17,13 +17,18 @@ surprise you like a visualization might.
 
 ### Hypothesis Generation vs. Hypothesis Confirmation
 
-Hypothesis Generation… - Look deeply at data and create a hypothesis
-about why it behaves a certain way. - Informal evaluation of hypotheses,
-through personal skepticism and challenging the data
+#### Hypothesis Generation
 
-Hypothesis Confirmation… - Often requires sophisticated stats - Can only
-use an observation one time (little confused about what this means in
-this context)
+  - Look deeply at data and create a hypothesis about why it behaves a
+    certain way.
+  - Informal evaluation of hypotheses, through personal skepticism and
+    challenging the data
+
+#### Hypothesis Confirmation
+
+  - Often requires sophisticated stats
+  - Can only use an observation one time (little confused about what
+    this means in this context)
 
 Visualization and modeling are not exclusive to either the generation or
 confirmation activity\!
