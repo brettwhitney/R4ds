@@ -138,8 +138,8 @@ ggplot(data = mpg) +
 
 #' Smaller values of `cty` are mapped to smaller shapes.
 #' 
-ggplot(data = mpg) +
-  geom_point(mapping = aes(x = displ, y = hwy, shape = cty))
+#ggplot(data = mpg) +
+#  geom_point(mapping = aes(x = displ, y = hwy, shape = cty))
 
 #' This results in an error and no plot, since it would be madness to assign a different 
 #' shape to each unique value of `cty`.
@@ -150,7 +150,7 @@ ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, y = hwy, color = cty, size = cty))
 
 #' This works just fine, creating a legend for each aesthetic. In practice, 
-#' perhaps a bit redundant but I could see a scenario where one **really** wants 
+#' perhaps a bit redundant, but I could see a scenario where one **really** wants 
 #' to draw attention to a certain feature of the data.
 #' 
 #' 5. What does the `stroke` aesthetic do? What shapes does it work with? 
@@ -179,4 +179,79 @@ ggplot(data = mpg) +
 #' Facets are a good way to include additional variables to a plot, especially 
 #' categorical variables.
 #' 
+#' `facet_wrap()` for faceting by one discrete variable
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2)
+
+#' `facet_grid()` for faceting by two variables
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_grid(drv ~ cyl)
+
+#' replacing one of the variables in `facet_grid()` will only facet in rows or 
+#' columns, depending on which side of the formula your remaining variable is.
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_grid(. ~ cyl)
+
+#' #### 3.5 Exercises
+#' 1. What happens if you facet on a continuous variable?
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_wrap(~ cty)
+#' ggplot makes a valiant effort to make plots for each value of your faceted 
+#' variable, but you end up with too many plots and not enough data in many of 
+#' them to see anything.
 #' 
+#' 2.What do the empty cells in plot with facet_grid(drv ~ cyl) mean? How do 
+#' they relate to this plot?
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = drv, y = cyl))
+
+#' They correspond to combinations of `drv` and `cyl` with no data to show. 
+#' In relation to the above plot, they represent the intersections of `x` and `y` 
+#' with no point plotted in the chart.
+
+#' 3.What plots does the following code make? What does `.` do?
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_grid(drv ~ .)
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_grid(. ~ cyl)
+
+#' The first makes 3 plots in 1 column where each row corresponds to a value of `drv`.
+#' The second makes 4 plots in 1 row where each column corresponds to a value of `cyl`.
+#' So, `.` causes a faceted plot with only 1 variable, but in 1 row or 1 column 
+#' rather than several columns/rows like `facet_wrap()`.
+
+#' 4.Take the first faceted plot in this section:
+#' 
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2)
+#' 
+#' What are the advantages to using faceting instead of the color aesthetic? 
+#' What are the disadvantages? How might the balance change if you had a larger dataset?
+#' 
+#' Faceting over color makes it a little easier to interrogate subsets of data, 
+#' especially when there are more than a handful of levels to the categorical variable you use to facet.
+#' 
+#' 5.Read `?facet_wrap`. What does `nrow` do? What does `ncol` do? What other options 
+#' control the layout of the individual panels? Why doesn't `facet_grid()` have 
+#' `nrow` and `ncol` arguments?
+#' 
+#' `nrow` and `ncol` control the number of rows or columns that ggplot will 
+#' generate faceted plots into. `facet_grid()` doesn't have this because it gets 
+#' those values from the variables you use to facet. Other options for controlling 
+#' the layout include `as.table`, `drop`, `switch`, and `drop`.
+#' 
+#' 6. When using `facet_grid()` you should usually put the variable with more unique 
+#' levels in the columns. Why?
+#' 
+#' I'm not satisfied with this answer, but I suppose it makes the overall appearance 
+#' of the plots more square, which is more pleasing to the eye. I'd wager it also puts
+#' empty facets at the bottom-right which is handy since we read left to right, top to 
+#' bottom.
