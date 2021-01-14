@@ -659,3 +659,144 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
 ```
 
 ![](data_visualization_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
+
+### 3.7 Statistical Transformations
+
+Switching gears to the `diamonds` data set and `geom_bar()`.
+
+``` r
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut))
+```
+
+![](data_visualization_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
+
+So the thing to point out here is that the y-axis, `count` is not a
+variable in the `diamonds` data set, nor did we supply it to
+`geom_bar()` in the mapping. So where did it come from? While geoms like
+`geom_point()` visualize the raw data, many geoms like `geom_bar()` will
+actually calculate new values to be plotted. These new values include
+stuff like counts, predictions from a model, summary statistics, etc.
+
+In ggplot parlance, a **stat** is the mathematical calculation used to
+generate these new values. The default value of the `stat` argument for
+each geom tells you what transformation that geom performs to plot the
+data. These correspond to a family of stat functions that can also be
+used with `ggplot()`.
+
+``` r
+ggplot(data = diamonds) + 
+  stat_count(mapping = aes(x = cut))
+```
+
+![](data_visualization_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
+
+Usually don’t need to worry about using a stat explicitly, but are three
+reasons you might: 1. Change the default, for example when the dataset
+already has a `count` variable and you need a bar chart.
+
+``` r
+demo <- tribble(
+  ~cut,         ~freq,
+  "Fair",       1610,
+  "Good",       4906,
+  "Very Good",  12082,
+  "Premium",    13791,
+  "Ideal",      21551
+)
+
+ggplot(data = demo) +
+  geom_bar(mapping = aes(x = cut, y = freq), stat = "identity")
+```
+
+![](data_visualization_files/figure-gfm/unnamed-chunk-36-1.png)<!-- -->
+
+2.  You want to change the default mapping between computed variables
+    and their aesthetics. Creating a bar chart of proportions rather
+    than counts for example.
+
+<!-- end list -->
+
+``` r
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, y = stat(prop), group = 1))
+```
+
+![](data_visualization_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
+
+3.  To draw attention, in your code, to the transformations taking
+    place. For example `stat_summary()` can be used like so:
+
+<!-- end list -->
+
+``` r
+ggplot(data = diamonds) + 
+  stat_summary(
+    mapping = aes(x = cut, y = depth),
+    fun.min = min,
+    fun.max = max,
+    fun = median
+  )
+```
+
+![](data_visualization_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
+
+#### 3.7 Exercises
+
+1.  What is the default geom associated with `stat_summary()`? How could
+    you rewrite the previous plot to use that geom function instead of
+    the stat function?
+
+The default geom is `geom_pointrange()` so we can rewrite the previous
+plot as:
+
+``` r
+ggplot(data = diamonds, mapping = aes(x = cut, y = depth)) +
+  geom_pointrange(stat = "summary",
+                  fun.min = min,
+                  fun.max = max,
+                  fun = median)
+```
+
+![](data_visualization_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
+
+2.  What does `geom_col()` do? How is it different to `geom_bar()`?
+
+`geom_col()` is essentially the same as `geom_bar()`, but the default
+stat is `identity` so you need to already have a count-like variable in
+your data present and explicitly map it to an aesthetic.
+
+3.  Most geoms and stats come in pairs that are almost always used in
+    concert. Read through the documentation and make a list of all the
+    pairs. What do they have in common?
+
+Sorry, no not doing this at 1 in the morning.
+
+4.  What variables does stat\_smooth() compute? What parameters control
+    its behavior?
+
+`stat_smooth` computes these variables: `y`, `ymin`, `ymax`, and `se`.
+Parameters like `method`, `formula`, `n`, `level`, and `se` can be used
+to control how these are computed and/or plotted.
+
+5.  In our proportion bar chart, we need to set group = 1. Why? In other
+    words what is the problem with these two graphs?
+
+<!-- end list -->
+
+``` r
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, y = after_stat(prop)))
+```
+
+![](data_visualization_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
+
+``` r
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = color, y = after_stat(prop)))
+```
+
+![](data_visualization_files/figure-gfm/unnamed-chunk-40-2.png)<!-- -->
+
+Each value of cut is being treated as it’s own group so the proportion
+of rows for each cut all equal 1.
