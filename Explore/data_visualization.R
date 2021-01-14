@@ -255,3 +255,140 @@ ggplot(data = mpg) +
 #' of the plots more square, which is more pleasing to the eye. I'd wager it also puts
 #' empty facets at the bottom-right which is handy since we read left to right, top to 
 #' bottom.
+#' 
+#' ### 3.6 Geometric Objects
+#' 
+#' The different visual objects available to display data are called geoms.
+#' 
+#' Could map a variable to aesthetics like `linetype` in `geom_smooth()` to assign 
+#' different levels of that aesthetic to different values of the variable.
+#' 
+#' You can add as many different geoms as you'd like to one plot. 
+#' Visit [here](https://exts.ggplot2.tidyverse.org/gallery/) for a gallery of 
+#' geoms in different packages.
+#' 
+#' For geoms like `geom_smooth()` that use a single visual object to represent 
+#' several rows of data you can use the `group` aesthetic to create several 
+#' objects. `group` does not add a legend or distinguishing features to the 
+#' different objects it draws.
+#' 
+ggplot(data = mpg) +
+  geom_smooth(mapping = aes(x = displ, y = hwy))
+
+ggplot(data = mpg) +
+  geom_smooth(mapping = aes(x = displ, y = hwy, group = drv))
+
+ggplot(data = mpg) +
+  geom_smooth(
+    mapping = aes(x = displ, y = hwy, color = drv),
+    show.legend = FALSE
+  )
+
+#' Adding different geoms to a single plot is as easy as...literally adding them with `+`. 
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  geom_smooth(mapping = aes(x = displ, y = hwy))
+
+#' And now our code is no longer DRY, so instead we can set a 'default' global 
+#' mapping for each geom by declaring it with `aes()` inside the initial call 
+#' to `ggplot()`.
+#' 
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_smooth()
+
+#' Less repetitive code, same result.
+#' 
+#' Using an aesthetic mapping in a geom then they will apply to that layer only. 
+#' So if we want to modify the previous graph to color the points by class, but 
+#' keep a single trend line we can do:
+#' 
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(mapping = aes(color = class)) + 
+  geom_smooth()
+
+#' This idea of local mappings extend to the data argument as well. Different 
+#' geoms in the same graph can use different data sets!
+#' 
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(mapping = aes(color = class)) + 
+  geom_smooth(data = filter(mpg, class == "subcompact"), se = FALSE)
+
+#' #### 3.6 Exercises
+#' 1. What geom would you use to draw a line chart? A boxplot? A histogram? 
+#' An area chart?
+#' 
+#' `geom_line()`, `geom_boxplot()`, `geom_histogram()`, `geom_area()`
+#' 
+#' 2.Run this code in your head and predict what the output will look like. Then, 
+#' run the code in R and check your predictions.
+#' 
+#' Prediction: A scatterplot under several smoothed lines whose color matches 
+#' to `drv`. The points of the scatterplot would also be mapped to a color by 
+#' their `drv` value. There will be a legend, and not the gray areas around the 
+#' smoothed lines showing standard error of the estimated line.
+#' 
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE)
+
+#' Nailed it.
+#' 
+#' 3. What does show.legend = FALSE do? What happens if you remove it? Why do you 
+#' think I used it earlier in the chapter?
+#' 
+#' It prevents a legend for that layer from being generated. I'd assume it was 
+#' used because it was shown in context with 2 other charts that didn't have 
+#' legends so removing it made the visual appearance of the charts more visually 
+#' pleasing and the legend couldn't distract from the point being made. 
+#' 
+#' 4. What does the `se` argument to `geom_smooth()` do?
+#' 
+#' `se` controls if a confidence interval will be displayed around the estimated 
+#' line.
+#' 
+#' 5. Will these two graphs look different? Why/why not?
+#' 
+#' They will be the same, both have the same aesthetic mappings for each layer, 
+#' but the first takes advantage of the ability to declare a global mapping in 
+#' `ggplot()`.
+#' 
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_smooth()
+
+ggplot() + 
+  geom_point(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_smooth(data = mpg, mapping = aes(x = displ, y = hwy))
+#' 
+#' 6. Recreate the R code necessary to generate the following graphs.
+#' 
+#' I went left to right, top to bottom:
+#' 
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point() +
+  geom_smooth(color = 'blue', se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point() +
+  geom_smooth(mapping = aes(group = drv), color = "blue", se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(color = "blue", se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(mapping = aes(linetype = drv), color = "blue", se = FALSE)
+
+#' Had to look up the answer for this last one, my crappy eyes couldn't tell 
+#' what was going on.
+#' 
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(size = 4, colour = "white") + 
+  geom_point(aes(colour = drv))
