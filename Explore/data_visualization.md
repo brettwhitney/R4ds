@@ -1022,3 +1022,22 @@ ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
 comparison, without it the relationship looks much flatter.
 `geom_abline()` adds the line `y = x` to the plot, which is handy for
 comparison.
+
+### 3.10 The layered grammar of graphics
+
+We could abstract all these different layers into a template like this:
+
+``` r
+# ggplot(data = <DATA>) + 
+#   <GEOM_FUNCTION>(
+#     mapping = aes(<MAPPINGS>),
+#     stat = <STAT>, 
+#     position = <POSITION>
+#   ) +
+#   <COORDINATE_FUNCTION> +
+#   <FACET_FUNCTION>
+```
+
+This template has 7 parameters, which correspond to all the elements of
+the **grammar of graphics**. These are the 7 things you need to uniquely
+describe any plot.
