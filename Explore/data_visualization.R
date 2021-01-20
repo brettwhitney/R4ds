@@ -598,4 +598,31 @@ bar <- ggplot(data = diamonds) +
 bar + coord_flip()
 bar + coord_polar()
 
-#' 3.9 Exercises
+#' #### 3.9 Exercises
+#' 
+#' 1. Turn a stacked bar chart into a pie chart using` coord_polar()`.
+#' I got close here, never would've figured out `theta = "y"` nonsense without 
+#' solutions repo.
+ggplot(data = mpg) +
+  geom_bar(mapping = aes(x = factor(1), fill = class), width = 1) +
+  coord_polar(theta = "y")
+
+#' 2. What does `labs()` do? Read the documentation.
+#' This function gives you control over titles, subtitles, captions, tags, axis 
+#' labels, etc. 
+#' 
+#' 3. What’s the difference between `coord_quickmap()` and `coord_map()`?
+#' `coord_map()` will use a projection (mercator for example) and is much more 
+#' intensive a computation. It does not preserve straight lines. quickmap will 
+#' preserve straight lines and is much faster. 
+#' 
+#' 4. What does the plot below tell you about the relationship between city and 
+#' highway mpg? Why is `coord_fixed()` important? What does `geom_abline()` do?
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
+  geom_point() + 
+  geom_abline() +
+  coord_fixed()
+
+#' `coord_fixed()` makes the scale between the x and y axis better for comparison, 
+#' without it the relationship looks much flatter. `geom_abline()` adds the line 
+#' `y = x` to the plot, which is handy for comparison. 
