@@ -492,3 +492,110 @@ ggplot(data = diamonds) +
 
 #' Each value of cut is being treated as it's own group so the proportion of 
 #' rows for each cut all equal 1. 
+#' 
+#' ### 3.8 Position Adjustments
+#' 
+#' **If you map `fill` to a variable like `clarity` then the bars are auto-magically stacked!**
+#' 
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = clarity))
+
+#' If you don't want that you can tweak the `position` argument to a couple 
+#' different options.
+#' 
+#' 1. `identity` - makes all bars start at 0 on the y-axis so they cover each 
+#' other unless you use an alpha value or set `fill = NA`.
+#' 
+ggplot(data = diamonds, mapping = aes(x = cut, fill = clarity)) + 
+  geom_bar(alpha = 1/5, position = "identity")
+
+ggplot(data = diamonds, mapping = aes(x = cut, colour = clarity)) + 
+  geom_bar(fill = NA, position = "identity")
+#' 
+#' 2. `fill` stacks the levels but sets each stacked bar to the same height. 
+#' Good for comparing across groups.
+#' 
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = clarity), position = "fill")
+
+#' 3. `dodge` puts objects that would overlap directly beside each other. 
+#' Kinda like a quick histogram for each category on the x-axis.
+#' 
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = clarity), position = "dodge")
+
+#' Overplotting got you down? Too many points graphed on top of each other 
+#' making it difficult to see the real picture? Try `position = jitter` in 
+#' your next scatterplot!
+#' 
+#' Before:
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+
+#' After: 
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), position = "jitter")
+
+#' #### 3.8 Exercises
+#'
+#' 1. What is the problem with this plot? How could you improve it?
+#' 
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) + 
+  geom_point()
+
+#' Guessing that things are overplotted, easy enough to find out:
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) + 
+  geom_jitter()
+#' Yup, overplotted due to rounding.
+#' 
+#' 2. What parameters to `geom_jitter()` control the amount of jittering?
+#' 
+#' `width` and `height` control the left-right and up-down jittering
+#' 
+#' 3. Compare and contrast `geom_jitter()` with `geom_count()`.
+#' 
+#' Jittering adds a little bit of random noise to each individual point while 
+#' `geom_count()` determines the number of points in an area then maps that count 
+#' to the point's area on the grid.
+ggplot(mpg, aes(cty, hwy)) +
+  geom_count()
+
+#' 
+#' 4. What’s the default position adjustment for `geom_boxplot()`? Create a 
+#' visualization of the mpg dataset that demonstrates it.
+#' 
+#' The default is `dodge2`.
+#' 
+#' ### 3.9 Coordinate Systems
+#' 
+#' Don't worry if you have a hard time with coord systems in ggplot, Hadley says 
+#' they are the most complicated part.
+#' 
+#' `coord_flip()` swaps the x and y axes.
+#' 
+#' `coord_quickmap()` sets things up properly for basic plotting of spatial data.
+nz <- map_data("nz")
+
+ggplot(nz, aes(long, lat, group = group)) +
+  geom_polygon(fill = "white", colour = "black")
+
+ggplot(nz, aes(long, lat, group = group)) +
+  geom_polygon(fill = "white", colour = "black") +
+  coord_quickmap()
+
+#' `coord_polar()` uses polar coordinates, which I really should review from my 
+#' high school math days.
+
+bar <- ggplot(data = diamonds) + 
+  geom_bar(
+    mapping = aes(x = cut, fill = cut), 
+    show.legend = FALSE,
+    width = 1
+  ) + 
+  theme(aspect.ratio = 1) +
+  labs(x = NULL, y = NULL)
+
+bar + coord_flip()
+bar + coord_polar()
+
+#' 3.9 Exercises
