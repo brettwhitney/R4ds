@@ -12,3 +12,4 @@ I have a personal goal to spend 4 hours a week with this book to start out 2021.
 **4 January**: Verified git and R Studio were playing nice, initialized this repository, learned about rendering R scripts as .md reports :exploding_head:, and read the general introduction to the book.
 
 
+ 
