@@ -1,0 +1,68 @@
+---
+title: "Chapter 4 - R4DS"
+author: "Brett Whitney"
+date: "1/26/2021"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Chapter 4 - Workflow Basics
+
+Welcome to my notes on chapter 4 of R for Data Science! You might notice that I switched to making these notes in a `.Rmd` document rather than a `.R` script. This is primarily due to the length and composition of my notes for chapter three; it seemed the balance of my notes were prose rather than code. 
+
+Note that because I'm not brand new to R and RStudio, I am already familiar with a lot of the tips in this chapter so my notes are only going to highlight new stuff, quotes, etc that are meaningful to me. 
+
+**The only way to get over [being frustrated] is to keep trying**
+
+**Code is miserable to read on a good day** - so use good formatting practices.
+
+### New Tricks
+For the console - say I have an object with a cumbersome name like `this_is_a_really_long_name` and I recently (in the current session) assigned it a value of 2.5 using this code: 
+
+```{r console_trick}
+this_is_a_really_long_name <- 2.5
+```
+
+Now I want to assign it the value 3.5 instead. By typing enough of the object name (ie `this`) I can then use the shortcut ctrl + up to get a list of previously executed commands starting with that string of letters. I can use the arrow keys to select the command I want to edit, hit enter, then edit the command without retyping the whole thing. 
+
+You can make assignment and printing the value of an object happen simultaneously by surrounding a statement with regular old parentheses.
+```{r assign_and_print}
+(y <- seq(1, 10, length.out = 5))
+```
+
+### Exercises
+1. Why does this code not work?
+```{r q1_code_prompt}
+my_variable <- 10
+my_varıable
+```
+Haha, this code is suppposed to produce an error saying `my_varıable` doesn't exist, but for some reason it's giving me the value of 10 assigned to `my_variable`. It should error out because they use two different characters for the letter 'i'. 
+
+2. Tweak each of the following R commands so that they run correctly:
+
+Original commands:
+```{r q2_code_prompt, eval = FALSE}
+ggplot(dota = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+
+fliter(mpg, cyl = 8)
+filter(diamond, carat > 3)
+```
+
+Fixed commands:
+```{r q2_code_response}
+library(tidyverse)
+
+ggplot(data = mpg) + # typo in "data" argument name
+  geom_point(mapping = aes(x = displ, y = hwy))
+
+filter(mpg, cyl == 8) # typo in filter() function call and misuse of "=" for comparison
+filter(diamonds, carat > 3) # typo in data set name
+```
+
+3. Press Alt + Shift + K. What happens? How can you get to the same place using the menus?
+
+Keyboard shortcuts, woot woot. Help -> Keyboard Shortcuts Help in the top level toolbar brings up the same shortcut cheatsheet. 
