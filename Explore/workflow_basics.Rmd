@@ -15,7 +15,7 @@ Welcome to my notes on chapter 4 of R for Data Science! You might notice that I 
 
 Note that because I'm not brand new to R and RStudio, I am already familiar with a lot of the tips in this chapter so my notes are only going to highlight new stuff, quotes, etc that are meaningful to me. 
 
-**The only way to get over [being frustrated] is to keep trying""
+**The only way to get over [being frustrated] is to keep trying**
 
 **Code is miserable to read on a good day** - so use good formatting practices.
 
